@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import dayOfYear from "dayjs/plugin/dayOfYear";
 
-dayjs.extend(relativeTime);
+dayjs.extend(dayOfYear);
 
 const githubProfileData = await fetch("https://api.github.com/users/cfuendev", {
   headers: { Authorization: `Bearer ${import.meta.env.GH_TOKEN}` },
@@ -25,7 +25,8 @@ const githubProfileObject: { avatar_url: string } =
   await githubProfileData.json();
 const githubReposArray: { stargazers_count: number }[] =
   await githubReposData.json();
-let githubEventsArray: { type: string, created_at: Date }[] = await githubEventsData.json();
+let githubEventsArray: { type: string; created_at: Date }[] =
+  await githubEventsData.json();
 
 const githubImageURL: string = githubProfileObject.avatar_url;
 const githubStarsCount: number = githubReposArray
@@ -37,16 +38,26 @@ githubEventsArray = githubEventsArray.filter(
 );
 // Only PushEvent and CreateEvent
 for (let i = 0; i < githubEventsArray.length; i++) {
-  if (
-    dayjs(githubEventsArray[0].created_at) === dayjs() &&
-    githubEventsArray[i - 1]
-  ) {
+  if (githubStreakNumber === 0 && i === 0) {
+    githubStreakNumber++;
+  }
+  if (githubEventsArray[i - 1]) {
     if (
+      dayjs(githubEventsArray[i - 1].created_at).dayOfYear() !==
+        dayjs(githubEventsArray[i].created_at).dayOfYear() &&
       dayjs(githubEventsArray[i - 1].created_at).diff(
         dayjs(githubEventsArray[i].created_at),
         "day"
       ) < 2
     ) {
+      console.log({
+        date: githubEventsArray[i].created_at,
+        type: githubEventsArray[i].type,
+        diff: dayjs(githubEventsArray[i - 1].created_at).diff(
+          dayjs(githubEventsArray[i].created_at),
+          "day"
+        ),
+      });
       githubStreakNumber++;
     } else {
       break;
