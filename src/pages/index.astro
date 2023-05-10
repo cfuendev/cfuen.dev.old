@@ -1,0 +1,124 @@
+---
+import Layout from "../layouts/Layout.astro";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+const githubProfileData = await fetch("https://api.github.com/users/cfuendev", {
+  headers: { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` },
+});
+const githubReposData = await fetch(
+  "https://api.github.com/users/cfuendev/repos",
+  {
+    headers: { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` },
+  }
+);
+const githubEventsData = await fetch(
+  "https://api.github.com/users/cfuendev/events/public",
+  {
+    headers: { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` },
+  }
+);
+
+const githubProfileObject = await githubProfileData.json();
+const githubReposArray = await githubReposData.json();
+let githubEventsArray = await githubEventsData.json();
+
+const githubImageURL = await githubProfileObject.avatar_url;
+const githubStarsCount = await githubReposArray
+  .map((gr) => gr.stargazers_count)
+  .reduce((acc, val) => acc + val, 0);
+let githubStreakNumber = 0;
+githubEventsArray = githubEventsArray.find(
+  (ge) => ge.type === "PushEvent" || ge.type === "CreateEvent"
+);
+// Only PushEvent and CreateEvent
+for (let i = 0; i < githubEventsArray.length; i++) {
+  if (
+    dayjs(githubEventsArray[0].created_at) === dayjs() &&
+    githubEventsArray[i - 1]
+  ) {
+    if (
+      dayjs(githubEventsArray[i - 1].created_at).diff(
+        dayjs(githubEventsArray[i].created_at),
+        "day"
+      ) < 2
+    ) {
+      githubStreakNumber++;
+    } else {
+      break;
+    }
+  }
+}
+---
+
+<Layout title="cfuen.dev">
+  <main style="padding: 30px;">
+    <div class="nes-container with-title is-centered">
+      <p class="title">cfuen.dev</p>
+      <div style="display: flex; flex-direction: row;">
+        <div
+          class="FocalImg"
+          style={`height: 150px; background-image:url(${githubImageURL})`}
+        >
+          <img alt="" />
+        </div>
+        <div
+          class="nes-balloon from-left"
+          style="height: 120px; margin-left: 30px;"
+        >
+          <h2>Hey! I'm a Fullstack dev</h2>
+          <h3>I build cool sites like this one</h3>
+        </div>
+      </div>
+      <div
+        id="Stats"
+        style="display: flex; flex-direction: row; align-items: end;"
+      >
+        <div>
+          <i class="nes-icon is-medium star"></i><span
+            >GitHub Stars: {githubStarsCount}</span
+          >
+        </div>
+        <div style="margin-left: 30px;">
+          <a
+            href="https://github.com/cfuendev"
+            target="_blank"
+            style="text-decoration: none;"
+          >
+            <i class="nes-icon github is-medium" style="margin-right:20px"></i>
+          </a>
+          <span>Current Streak: {githubStreakNumber}</span>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column;"></div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    height: 100dvh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+	align-items: center;
+  }
+
+  .nes-container {
+    width: 920px;
+  }
+
+  .FocalImg {
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+
+  #Stats > div > span {
+    margin-left: 10px;
+  }
+</style>
