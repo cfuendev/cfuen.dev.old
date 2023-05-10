@@ -1,7 +1,9 @@
 import { defineConfig } from 'astro/config';
 
+import netlify from "@astrojs/netlify/functions";
+
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://cfuendev.github.io',
-    base: '/cfuen.dev',
+  output: "server",
+  adapter: netlify()
 });
