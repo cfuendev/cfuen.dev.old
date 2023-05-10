@@ -21,16 +21,18 @@ const githubEventsData = await fetch(
   }
 );
 
-const githubProfileObject = await githubProfileData.json();
-const githubReposArray = await githubReposData.json();
-let githubEventsArray = await githubEventsData.json();
+const githubProfileObject: { avatar_url: string } =
+  await githubProfileData.json();
+const githubReposArray: { stargazers_count: number }[] =
+  await githubReposData.json();
+let githubEventsArray: { type: string }[] = await githubEventsData.json();
 
-const githubImageURL = githubProfileObject.avatar_url;
-const githubStarsCount = githubReposArray
+const githubImageURL: string = githubProfileObject.avatar_url;
+const githubStarsCount: number = githubReposArray
   .map((gr) => gr.stargazers_count)
   .reduce((acc, val) => acc + val, 0);
 let githubStreakNumber = 0;
-githubEventsArray = githubEventsArray.find(
+githubEventsArray = githubEventsArray.filter(
   (ge) => ge.type === "PushEvent" || ge.type === "CreateEvent"
 );
 // Only PushEvent and CreateEvent
