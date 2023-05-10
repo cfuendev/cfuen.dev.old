@@ -25,8 +25,8 @@ const githubProfileObject = await githubProfileData.json();
 const githubReposArray = await githubReposData.json();
 let githubEventsArray = await githubEventsData.json();
 
-const githubImageURL = await githubProfileObject.avatar_url;
-const githubStarsCount = await githubReposArray
+const githubImageURL = githubProfileObject.avatar_url;
+const githubStarsCount = githubReposArray
   .map((gr) => gr.stargazers_count)
   .reduce((acc, val) => acc + val, 0);
 let githubStreakNumber = 0;
@@ -104,7 +104,7 @@ for (let i = 0; i < githubEventsArray.length; i++) {
     display: flex;
     flex-direction: column;
     justify-content: center;
-	align-items: center;
+    align-items: center;
   }
 
   .nes-container {
