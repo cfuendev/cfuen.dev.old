@@ -13,5 +13,8 @@
     "@astrojs/netlify": "^2.2.2",
     "astro": "^2.4.4",
     "dayjs": "^1.11.7"
+  },
+  "devDependencies": {
+    "astro-icon": "^0.8.0"
   }
 }

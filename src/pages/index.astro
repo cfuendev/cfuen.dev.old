@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import dayjs from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
+import scheduleArray from "../schedule.json";
+import Icon from "astro-icon";
 
 dayjs.extend(dayOfYear);
 
@@ -85,24 +87,39 @@ for (let i = 0; i < githubEventsArray.length; i++) {
           <h3>I build cool sites like this one</h3>
         </div>
       </div>
-      <div
-        id="Stats"
-        style="display: flex; flex-direction: row; align-items: end;"
-      >
+      <div id="Stats">
         <div>
           <i class="nes-icon is-medium star"></i><span
             >GitHub Stars: {githubStarsCount}</span
           >
         </div>
-        <div style="margin-left: 30px;">
+        <div>
           <a
             href="https://github.com/cfuendev"
             target="_blank"
             style="text-decoration: none;"
           >
-            <i class="nes-icon github is-medium" style="margin-right:20px"></i>
+            <i class="nes-icon github is-medium"></i>
           </a>
           <span>Current Streak: {githubStreakNumber}</span>
+        </div>
+        <div>
+          <Icon
+            style="transform: translateY(2px);"
+            name="pixelarticons:clock"
+            width="48px"
+          />
+          <span
+            >{
+              scheduleArray.find(
+                (c) =>
+                  c.hours.find((h) => h === dayjs().format("H")) &&
+                  c.day === dayjs().format("d")
+              )
+                ? "Busy"
+                : "Available"
+            }</span
+          >
         </div>
       </div>
     </div>
@@ -121,7 +138,7 @@ for (let i = 0; i < githubEventsArray.length; i++) {
   }
 
   .nes-container {
-    width: 920px;
+    width: 970px;
   }
 
   .FocalImg {
@@ -129,6 +146,22 @@ for (let i = 0; i < githubEventsArray.length; i++) {
     border-radius: 100%;
     background-position: center;
     background-size: cover;
+  }
+
+  #Stats {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+  }
+
+  #Stats > div {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+  }
+
+  #Stats > div:not(:nth-child(1)) {
+    margin-left: 30px;
   }
 
   #Stats > div > span {
