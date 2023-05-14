@@ -68,6 +68,25 @@ for (let i = 0; i < githubEventsArray.length; i++) {
 }
 ---
 
+<script>
+  import dayjs from "dayjs";
+  import scheduleArray from "../schedule.json";
+
+  const cfuenStatus = ["Available", "Busy", "Sleeping"];
+
+  setTimeout(
+    () =>
+      {document.getElementById("Status").textContent =
+        cfuenStatus[
+          scheduleArray.find(
+            (c) =>
+              c.hours.find((h) => h === dayjs().format("H")) &&
+              c.day === dayjs().format("d")
+          )?.type
+        ] || "Available"
+}, 500);
+</script>
+
 <Layout title="cfuen.dev">
   <main style="padding: 30px;">
     <div class="nes-container with-title is-centered">
@@ -109,17 +128,7 @@ for (let i = 0; i < githubEventsArray.length; i++) {
             name="pixelarticons:clock"
             width="48px"
           />
-          <span
-            >{
-              scheduleArray.find(
-                (c) =>
-                  c.hours.find((h) => h === dayjs().format("H")) &&
-                  c.day === dayjs().format("d")
-              )
-                ? "Busy"
-                : "Available"
-            }</span
-          >
+          <span id="Status">[Error: Cfuen's Status not set]</span>
         </div>
       </div>
     </div>
