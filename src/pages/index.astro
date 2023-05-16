@@ -84,13 +84,17 @@ for (let i = 0; i < githubEventsArray.length; i++) {
   document.querySelector('#Streak .Text').textContent = i18n[lang].gh_streak;
   document.querySelector('#Streak .Days').textContent = ' '+i18n[lang].days;
 
-  setTimeout(() => {
-    const statusIndex = scheduleArray.find(
+  // Un problema para arreglar:
+  // 2 - Contrario a lo que pensaba, los días de dayjs.format("d") no empiezan en 0 (Lunes = 1)
+  setInterval(() => {
+    const statusSearchResult = scheduleArray.find(
           (c) =>
             c.hours.find((h) => h === dayjs().format("H")) &&
             c.day === dayjs().format("d")
-        )?.type
-      
+        )
+
+    const statusIndex = statusSearchResult?.type
+
     document.querySelector("#Status > .Text").textContent =
       cfuenStatus[statusIndex] || cfuenStatus[0];
 
@@ -120,14 +124,14 @@ for (let i = 0; i < githubEventsArray.length; i++) {
           class="nes-balloon from-left"
           style="height: 120px; margin-left: 30px;"
         >
-          <h2>[IternationalizationError]</h2>
-          <h3>[IternationalizationError]</h3>
+          <h2>[I18nError]</h2>
+          <h3>[I18nError]</h3>
         </div>
       </div>
       <div id="Stats">
         <div id="Stars">
           <i class="nes-icon is-medium star"></i><span
-            ><span class="Text">[InternationalizationError]</span>: {
+            ><span class="Text">[I18nError]</span>: {
               githubStarsCount
             }</span
           >
@@ -141,9 +145,9 @@ for (let i = 0; i < githubEventsArray.length; i++) {
             <i class="nes-icon github is-medium"></i>
           </a>
           <span
-            ><span class="Text">[InternationalizationError]</span>: {
+            ><span class="Text">[I18nError]</span>: {
               githubStreakNumber
-            }<span class="Days"> [InternationalizationError]</span></span
+            }<span class="Days"> [I18nError]</span></span
           >
         </div>
         <div id="Status">

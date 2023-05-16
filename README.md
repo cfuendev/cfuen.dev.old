@@ -11,3 +11,4 @@ TODOs / Roadmap:
 - [ ] My top projects
 - [ ] A music player ???
 - [ ] UI Themes ?!?! (With light/dark mode each)
+- [ ] Debug Mode
