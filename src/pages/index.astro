@@ -71,20 +71,37 @@ for (let i = 0; i < githubEventsArray.length; i++) {
 <script>
   import dayjs from "dayjs";
   import scheduleArray from "../schedule.json";
+  import i18n from "../i18n.json";
 
-  const cfuenStatus = ["Available", "Busy", "Sleeping"];
+  const navigatorLanguage = navigator.language.split('')
+  const lang = navigatorLanguage[0]+navigatorLanguage[1];
 
-  setTimeout(
-    () =>
-      {document.getElementById("Status").textContent =
-        cfuenStatus[
-          scheduleArray.find(
-            (c) =>
-              c.hours.find((h) => h === dayjs().format("H")) &&
-              c.day === dayjs().format("d")
-          )?.type
-        ] || "Available"
-}, 500);
+  const cfuenStatus = i18n[lang].status;
+
+  document.querySelector('#Dialogue > h2').textContent = i18n[lang].h2;
+  document.querySelector('#Dialogue > h3').textContent = i18n[lang].h3;
+  document.querySelector('#Stars .Text').textContent = i18n[lang].gh_stars;
+  document.querySelector('#Streak .Text').textContent = i18n[lang].gh_streak;
+  document.querySelector('#Streak .Days').textContent = ' '+i18n[lang].days;
+
+  setTimeout(() => {
+    const statusIndex = scheduleArray.find(
+          (c) =>
+            c.hours.find((h) => h === dayjs().format("H")) &&
+            c.day === dayjs().format("d")
+        )?.type
+      
+    document.querySelector("#Status > .Text").textContent =
+      cfuenStatus[statusIndex] || cfuenStatus[0];
+
+      if (statusIndex === 2) {
+        document.querySelector('#Status > *:nth-child(1)').style.display = 'none';
+        document.querySelector('#Status > *:nth-child(2)').style.display = ''
+      } else {
+        document.querySelector('#Status > *:nth-child(1)').style.display = '';
+        document.querySelector('#Status > *:nth-child(2)').style.display = 'none'
+      }
+  }, 500);
 </script>
 
 <Layout title="cfuen.dev">
@@ -99,20 +116,23 @@ for (let i = 0; i < githubEventsArray.length; i++) {
           <img alt="" />
         </div>
         <div
+          id="Dialogue"
           class="nes-balloon from-left"
           style="height: 120px; margin-left: 30px;"
         >
-          <h2>Hey! I'm a Fullstack dev</h2>
-          <h3>I build cool sites like this one</h3>
+          <h2>[IternationalizationError]</h2>
+          <h3>[IternationalizationError]</h3>
         </div>
       </div>
       <div id="Stats">
-        <div>
+        <div id="Stars">
           <i class="nes-icon is-medium star"></i><span
-            >GitHub Stars: {githubStarsCount}</span
+            ><span class="Text">[InternationalizationError]</span>: {
+              githubStarsCount
+            }</span
           >
         </div>
-        <div>
+        <div id="Streak">
           <a
             href="https://github.com/cfuendev"
             target="_blank"
@@ -120,15 +140,24 @@ for (let i = 0; i < githubEventsArray.length; i++) {
           >
             <i class="nes-icon github is-medium"></i>
           </a>
-          <span>Current Streak: {githubStreakNumber}</span>
+          <span
+            ><span class="Text">[InternationalizationError]</span>: {
+              githubStreakNumber
+            }<span class="Days"> [InternationalizationError]</span></span
+          >
         </div>
-        <div>
+        <div id="Status">
           <Icon
             style="transform: translateY(2px);"
             name="pixelarticons:clock"
             width="48px"
           />
-          <span id="Status">[Error: Cfuen's Status not set]</span>
+          <Icon
+            style="transform: translateY(2px);"
+            name="pixelarticons:battery-charging"
+            width="48px"
+          />
+          <span class="Text">[CfuenStatusError]</span>
         </div>
       </div>
     </div>
@@ -147,7 +176,10 @@ for (let i = 0; i < githubEventsArray.length; i++) {
   }
 
   .nes-container {
-    width: 970px;
+    width: 1050px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .FocalImg {

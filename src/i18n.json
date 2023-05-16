@@ -1,0 +1,18 @@
+{
+    "en": {
+        "status": ["Available", "Busy", "Sleeping"],
+        "h2": "Hey! I'm a Fullstack dev",
+        "h3": "I build cool sites like this one",
+        "gh_stars": "GitHub Stars",
+        "gh_streak": "Current Streak",
+        "days": "days"
+    },
+    "es": {
+        "status": ["Disponible", "Ocupado", "Durmiendo"],
+        "h2": "Hey! Soy un Fullstack Developer",
+        "h3": "Construyo sitios web chéveres (Como este)",
+        "gh_starts": "Estrellas de GitHub",
+        "gh_streak": "Racha Actual",
+        "days": "días"
+    }
+}
