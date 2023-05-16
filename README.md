@@ -5,6 +5,7 @@ I'm building it step-by-step, slowly rolling out releases to make sure I don't e
 TODOs / Roadmap:
 - [x] Sleep hours + Icon
 - [x] i18n
+- [ ] Fix Pixelart
 - [ ] Info Tooltips
 - [ ] Dark / Light Mode
 - [ ] My top skills
